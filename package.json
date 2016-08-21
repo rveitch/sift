@@ -1,0 +1,71 @@
+
+{
+  "name": "webpack-searchkit-es6-boilerplate",
+  "version": "0.1.2",
+  "description": "Example searchkit project using webpack & es6",
+
+  "homepage": "https://github.com/searchkit/searchkit-boilerplate",
+  "bugs": "https://github.com/searchkit/searchkit-boilerplate/issues",
+
+  "license": "ISC",
+
+  "authors": [
+    {
+      "name": "Joseph McElroy",
+      "email": "phoey1@gmail.com"
+    },
+    {
+      "name": "Siavash Etemadieh",
+      "email": "ssetem@gmail.com"
+    }
+  ],
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/searchkit/searchkit-boilerplate"
+  },
+
+  "scripts": {
+    "start": "node start.js",
+    "build": "rm -rf dist; webpack --config webpack.prod.config.js -p"
+  },
+
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "ejs": "^2.3.4",
+    "method-override": "^2.3.5",
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0",
+    "react-hot-loader": "^1.3.0",
+    "searchkit": "^0.10.0-2",
+    "express": "^4.14.0",
+    "compression": "^1.6.2",
+    "lodash": "^4.14.1",
+    "warning": "^2.0.0",
+    "invariant": "^2.2.1",
+    "deep-equal": "^1.0.1",
+    "query-string": "^3.0.0"
+  },
+
+  "devDependencies": {
+    "css-loader": "^0.20.2",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.7.0",
+    "node-sass": "^3.3.3",
+    "postcss-loader": "^0.8.0",
+    "react-router": "^2.0.0",
+    "sass-loader": "^3.0.0",
+    "style-loader": "^0.13.0",
+    "babel-core": "^6.3.17",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.2",
+    "webpack-config": "^2.3.0",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-dev-server": "^1.12.1",
+    "webpack-hot-middleware": "^2.5.0"
+  }
+}
