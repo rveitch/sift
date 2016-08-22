@@ -81,8 +81,8 @@ export class SearchPage extends React.Component {
 		            <ActionBarRow>
 		              <HitsStats/>
 									<SortingSelector options={[
-										{label:"Relevance", field:"_score", order:"desc", defaultOption:true},
-										{label:"Newest", field:"created", order:"desc"},
+										{label:"Newest", field:"created", order:"desc", defaultOption:true},
+										{label:"Relevance", field:"_score", order:"desc"},
 										{label:"Oldest", field:"created", order:"asc"}
 									]}/>
 		            </ActionBarRow>
@@ -91,7 +91,7 @@ export class SearchPage extends React.Component {
 		              <ResetFilters/>
 		            </ActionBarRow>
 		          </ActionBar>
-		          <Hits mod="sk-hits-grid" hitsPerPage={10} itemComponent={MovieHitsGridItem}
+		          <Hits mod="sk-hits-grid" hitsPerPage={16} itemComponent={MovieHitsGridItem}
 		            sourceFilter={["title", "search_thumb", "url", "nid"]}/>
 		          <NoHits/>
 							<Pagination showNumbers={true}/>
