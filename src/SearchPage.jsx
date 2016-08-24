@@ -19,6 +19,7 @@ const searchkit = new SearchkitManager(host, {
   basicAuth:"3590b9d403c87e0697b6:8c2e5209a1"
 })
 //var Hits = Searchkit.Hits;
+//http://docs.searchkit.co/stable/docs/setup/default-query.html
 
 const MovieHitsGridItem = (props)=> {
   const {bemBlocks, result} = props
