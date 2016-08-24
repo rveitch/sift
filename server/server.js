@@ -24,6 +24,7 @@ module.exports = {
     var port = Number(process.env.PORT || 3000);
 
     if (!env.production) {
+			console.log('Environment: Dev');
       var webpack = require("webpack");
       var webpackMiddleware = require("webpack-dev-middleware");
       var webpackHotMiddleware = require('webpack-hot-middleware');
@@ -47,6 +48,7 @@ module.exports = {
 
 
     } else {
+			console.log('Environment: Production');
       app.use("/static", express.static(__dirname + '/dist'));
     }
 
