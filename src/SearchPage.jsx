@@ -18,19 +18,37 @@ const searchkit = new SearchkitManager(host, {
 	useHistory: false,
   basicAuth:"3590b9d403c87e0697b6:8c2e5209a1"
 })
+
+/*searchkit.addDefaultQuery((query)=> {
+    return query.addQuery(FilteredQuery({
+      filter:BoolShould([
+        TermQuery("status", "1"),
+      ])
+    }))
+  })*/
 //var Hits = Searchkit.Hits;
 //http://docs.searchkit.co/stable/docs/setup/default-query.html
 
+//source.author[0].realname
+
 const MovieHitsGridItem = (props)=> {
   const {bemBlocks, result} = props
+
 	let url = "http://" + result._source.url
-  let thumb = "http://" + result._source.search_thumb
-	let img = (thumb == "http://null") ? "http://www.inforum.com/sites/all/themes/inforum_theme/images/touch-icon.png":"http://" + result._source.search_thumb
+
+
+	let post_date = new Date(result._source.post_date)
+	let date = post_date.toDateString()
+	let thumb = (result._source.search_thumb == "www.fccnn.com/sites/default/files/styles/square_300/public") ? null:result._source.search_thumb
+	let img = (thumb == null) ? "http://www.inforum.com/sites/all/themes/inforum_theme/images/touch-icon.png":"http://" + result._source.search_thumb
   const source:any = _.extend({}, result._source, result.highlight)
+	//let authorname = source.author
+	//console.log(authorname.realname);
+	//<h3 className={bemBlocks.item("subtitle")}>{date}, by {source.name}</h3>
   return (
     <div className={bemBlocks.item().mix(bemBlocks.container("item"))} data-qa="hit">
       <a href={url} target="_blank">
-        <img data-qa="poster" className={bemBlocks.item("poster")} src={img} width="170" height="170"/>
+        <img data-qa="poster" className={bemBlocks.item("poster")} src={img} />
         <div data-qa="title" className={bemBlocks.item("title")} dangerouslySetInnerHTML={{__html:source.title}}>
         </div>
       </a>
@@ -93,7 +111,7 @@ export class SearchPage extends React.Component {
 		            </ActionBarRow>
 		          </ActionBar>
 		          <Hits mod="sk-hits-grid" hitsPerPage={16} itemComponent={MovieHitsGridItem}
-		            sourceFilter={["title", "search_thumb", "url", "nid"]}/>
+		            sourceFilter={["title", "search_thumb", "url", "nid", "post_date", "author.realname", "name"]}/>
 		          <NoHits/>
 							<Pagination showNumbers={true}/>
 		        </LayoutResults>

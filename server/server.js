@@ -23,7 +23,7 @@ module.exports = {
 
     var port = Number(process.env.PORT || 3000);
 
-    if (env.production) {
+    if (!env.production) {
 			console.log('Environment: Dev');
       var webpack = require("webpack");
       var webpackMiddleware = require("webpack-dev-middleware");
