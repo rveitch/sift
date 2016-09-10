@@ -14,3 +14,119 @@
 .sk-hits-list-hit__text {
 	margin-bottom: 5px;
 }
+
+/* Browser specific (not valid) styles to make preformatted text wrap */
+
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+ margin: 0px;
+}
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
+
+
+.sk-hits-response {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-flow: column wrap;
+    -ms-flex-flow: column wrap;
+    flex-flow: column wrap;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start
+}
+
+.sk-hits-response em {
+    background: #ff0
+}
+
+.sk-hits-response a {
+    text-decoration: none;
+    color: #08c
+}
+
+.sk-hits-response__no-results {
+    text-align: center;
+    margin-top: 60px
+}
+
+.sk-hits-response__item {
+    margin-bottom: 20px
+}
+
+.sk-hits-response-hit, .sk-hits-response__item {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex
+}
+
+.sk-hits-response-hit__poster {
+    width: 200px;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 200px;
+    -ms-flex: 0 0 200px;
+    flex: 0 0 200px;
+    padding: 0 20px
+}
+
+.sk-hits-response-hit__poster img {
+    max-width: 100%;
+    margin: 0 auto
+}
+
+.sk-hits-response-hit__details {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 0;
+    -ms-flex: 1 0 0;
+    flex: 1 0 0;
+    padding: 0px 20px;
+		max-width: 1180px;
+}
+
+.sk-hits-response-hit__title {
+    line-height: 20px;
+    margin: 0 0 5px;
+    font-size: 18px
+}
+
+.sk-hits-response-hit__subtitle {
+    margin: 0 0 5px
+}
+
+.sk-hits-response-hit__subtitle,.sk-hits-response-hit__tags {
+    line-height: 20px;
+    font-size: 14px;
+    color: #666;
+    font-weight: 300
+}
+
+.sk-hits-response-hit__tags {
+    margin: 0;
+    response-style: none;
+    padding: 0;
+    margin-bottom: 10px
+}
+
+.sk-hits-response-hit__tags .sk-tag-filter:hover {
+    color: #08c
+}
+
+.sk-hits-response-hit__tags .sk-tag-filter:active {
+    color: #000
+}
+
+.sk-hits-response-hit__text {
+    line-height: 22px;
+    max-width: 800px
+}

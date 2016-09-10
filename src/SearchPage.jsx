@@ -1,14 +1,17 @@
 import * as React from "react";
 import * as _ from "lodash";
 
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/styles';
+
 import {
 	SearchkitManager, SearchkitProvider,
 	SearchBox, RefinementListFilter, MenuFilter,
 	Hits, HitsStats, NoHits, Pagination, SortingSelector,
 	SelectedFilters, ResetFilters, ItemHistogramList,
 	Layout, LayoutBody, LayoutResults, TopBar,
-	SideBar, ActionBar, ActionBarRow, RangeFilter, ViewSwitcherToggle,
-  ViewSwitcherHits, MultiMatchQuery, SearchkitComponent
+	SideBar, ActionBar, ActionBarRow, DynamicRangeFilter, RangeFilter, ViewSwitcherToggle,
+  ViewSwitcherHits, MultiMatchQuery, SearchkitComponent, PageSizeSelector, Select, CheckboxFilter, TermQuery, BoolMust, RangeQuery
 } from "searchkit";
 
 require("./index.scss");
@@ -19,6 +22,9 @@ const searchkit = new SearchkitManager(host, {
 	useHistory: false,
   basicAuth:"3590b9d403c87e0697b6:8c2e5209a1"
 })
+//<DynamicRangeFilter field="date_terms.month" id="monthrange" title="Month Range"/>
+//sourceFilter={{"exclude":["body","images","picture"]}}
+//sourceFilter={{"include":[],"exclude":["body”]}}
 
 //var myVar = setInterval(searchkit.reloadSearch(), 1000)
 
@@ -40,13 +46,40 @@ function refreshMe() {
 	//console.log('refreshed')
 }
 
-const MovieHitsGridItem = (props)=> {
+function JSONHighlight(json) {
+    if (typeof json != 'string') {
+         json = JSON.stringify(json, undefined, 3);
+    }
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+}
+
+let removalFn = searchkit.addResultsListener((results)=>{
+	//do something with results
+	//console.log(searchkit) // output Searchkit Manager object to console for debugging
+})
+
+const ArticleHitsGridItem = (props)=> {
   const {bemBlocks, result} = props
 	let url = "http://" + result._source.url
 	let post_date = new Date(result._source.post_date)
 	let date = post_date.toDateString()
 	let thumb = (result._source.search_thumb == "www.fccnn.com/sites/default/files/styles/square_300/public") ? null:result._source.search_thumb
-	let img = (thumb == null) ? "http://www.inforum.com/sites/all/themes/inforum_theme/images/touch-icon.png":"http://" + result._source.search_thumb
+	let img = (thumb == null) ? "https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/inforum-placeholder.png":"http://" + result._source.search_thumb
   const source:any = _.extend({}, result._source, result.highlight)
   return (
     <div className={bemBlocks.item().mix(bemBlocks.container("item"))} data-qa="hit">
@@ -59,19 +92,19 @@ const MovieHitsGridItem = (props)=> {
   )
 }
 
-export const MovieHitsListItem = (props)=> {
+export const ArticleHitsListItem = (props)=> {
   const {bemBlocks, result} = props
 	let url = "http://" + result._source.url
 	let post_date = new Date(result._source.post_date)
 	let date = post_date.toDateString()
 	let thumb = (result._source.search_thumb == "www.fccnn.com/sites/default/files/styles/square_300/public") ? null:result._source.search_thumb
-	let img = (thumb == null) ? "http://www.inforum.com/sites/all/themes/inforum_theme/images/touch-icon.png":"http://" + result._source.search_thumb
-	let name = (result._source.name) ? ", by " + result._source.name:""
+	let img = (thumb == null) ? "https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/inforum-placeholder.png":"http://" + result._source.search_thumb
+	//let name = (result._source.name) ? ", by " + result._source.name:""
 	let author = (result._source.author) ? result._source.author:""
 	let authorname = (author.realname) ? ", by " + author.realname:name
-	let body = result._source.body
-	let bodyval = (body.safe_value !== "") ? body.safe_value:body.value.replace(/(<([^>]+)>)/ig,"")
-	let exerpt = bodyval.substr(0, 252)+'&hellip;'
+	//let body = result._source.body
+	//let bodyval = (body.safe_value !== "") ? body.safe_value:body.value.replace(/(<([^>]+)>)/ig,"")
+	//let excerpt = bodyval.substr(0, 252)+'&hellip;' // add check to make sure substr is not null
 	let category = (result._source.category[0]['name']) ? "| " + result._source.category[0]['name']:""
   const source:any = _.extend({}, result._source, result.highlight)
   return (
@@ -82,7 +115,22 @@ export const MovieHitsListItem = (props)=> {
       <div className={bemBlocks.item("details")}>
         <a href={url} target="_blank"><h2 className={bemBlocks.item("title")} dangerouslySetInnerHTML={{__html:source.title}}></h2></a>
         <h3 className={bemBlocks.item("subtitle")}>{date}{authorname} | {source.newspaper} {category}</h3>
-        <div className={bemBlocks.item("text")} dangerouslySetInnerHTML={{__html:exerpt}}></div>
+        <div className={bemBlocks.item("text")} dangerouslySetInnerHTML={{__html:source.excerpt}}></div>
+      </div>
+    </div>
+  )
+}
+
+const ArticleHitsResponseItem = (props)=> {
+  const {bemBlocks, result} = props
+  const source:any = _.extend({}, result._source, result.highlight)
+	let jsonstr = JSON.stringify(source, undefined, 3)
+	console.log(jsonstr)
+	//let jsonresult = JSONHighlight(source)
+  return (
+    <div className={bemBlocks.item().mix(bemBlocks.container("item"))} data-qa="hit">
+			<div className={bemBlocks.item("details")}>
+				<SyntaxHighlighter language='json' style={docco}>{jsonstr}</SyntaxHighlighter>
       </div>
     </div>
   )
@@ -118,7 +166,7 @@ export class SearchPage extends React.Component {
 							<RefinementListFilter
 		            id="category"
 		            title="Category"
-		            field="category.name"
+		            field="category.name.raw"
 		            operator="AND"
 		            size={6}/>
 							<RefinementListFilter
@@ -127,6 +175,10 @@ export class SearchPage extends React.Component {
 								field="author.realname.raw"
 								operator="AND"
 								size={6}/>
+							<CheckboxFilter id="old-movies" title="Status" label="Draft" filter={
+									BoolMust([
+										TermQuery("status", "0")
+									])} />
 		        </SideBar>
 		        <LayoutResults>
 
@@ -134,6 +186,7 @@ export class SearchPage extends React.Component {
 		            <ActionBarRow>
 		              <HitsStats/>
 									<ViewSwitcherToggle/>
+									<PageSizeSelector options={[1, 5, 10, 16, 24]} listComponent={Select}/>
 									<SortingSelector options={[
 										{label:"Newest", field:"created", order:"desc", defaultOption:true},
 										{label:"Relevance", field:"_score", order:"desc"},
@@ -149,10 +202,11 @@ export class SearchPage extends React.Component {
 
 							<ViewSwitcherHits
 								hitsPerPage={16}
-								sourceFilter={["title", "search_thumb", "url", "nid", "post_date", "author", "name", "newspaper", "body", "category"]}
+								sourceFilter={["nid","type","post_date","title","excerpt","author","newspaper","url","search_thumb","category","tags"]}
 								hitComponents = {[
-									{key:"grid", title:"Grid", itemComponent:MovieHitsGridItem, defaultOption:true},
-									{key:"list", title:"List", itemComponent:MovieHitsListItem}
+									{key:"grid", title:"Grid", itemComponent:ArticleHitsGridItem, defaultOption:true},
+									{key:"list", title:"List", itemComponent:ArticleHitsListItem},
+									{key:"response", title:"Response", itemComponent:ArticleHitsResponseItem}
 								]}
 								scrollTo="body"
 								/>
