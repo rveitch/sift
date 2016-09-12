@@ -201,7 +201,7 @@ export class SearchPage extends React.Component {
 		          </ActionBar>
 
 							<ViewSwitcherHits
-								hitsPerPage={16}
+								hitsPerPage={10}
 								sourceFilter={["nid","type","post_date","title","excerpt","author","newspaper","url","search_thumb","category","tags"]}
 								hitComponents = {[
 									{key:"grid", title:"Grid", itemComponent:ArticleHitsGridItem, defaultOption:true},
