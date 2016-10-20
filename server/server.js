@@ -76,6 +76,8 @@ module.exports = {
     }
 
     app.get('*', function(req, res) {
+			// http://localhost:3000/page?q=search
+			// console.log(req.query);
       res.render('index');
     });
 

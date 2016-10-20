@@ -32,13 +32,13 @@ const searchkit = new SearchkitManager(host, {
 //setInterval searchkit.reloadSearch()
 
 /* Default Query Example */
-/*let defQuery = "crime"
+let defQuery = "crime"
 searchkit.addDefaultQuery((query)=> {
     return query.addQuery(MultiMatchQuery(
 			defQuery, {
 				fields:["title^5", "body.value", "author.realname", "category.categories.name", "tags.name"]
 			}))
-		})*/
+		})
 //var Hits = Searchkit.Hits;
 //http://docs.searchkit.co/stable/docs/setup/default-query.html
 
@@ -70,15 +70,6 @@ function JSONHighlight(json) {
     });
 }
 
-
-// http://docs.searchkit.co/stable/docs/core/SearchkitManager.html
-searchkit.setQueryProcessor((plainQueryObject)=>{
-	console.log(plainQueryObject)
-	plainQueryObject.size = 1 // set size to 1
-  //plainQueryObject.source = false
-  return plainQueryObject
-})
-
 let removalFn = searchkit.addResultsListener((results)=>{
 	//do something with results
 	//console.log(searchkit) // output Searchkit Manager object to console for debugging
@@ -94,11 +85,11 @@ const ArticleHitsGridItem = (props)=> {
   const source:any = _.extend({}, result._source, result.highlight)
   return (
     <div className={bemBlocks.item().mix(bemBlocks.container("item"))} data-qa="hit">
-      <a href={url} target="_blank">
+			<Link to="page">
         <img data-qa="poster" className={bemBlocks.item("poster")} src={img} />
         <div data-qa="title" className={bemBlocks.item("title")} dangerouslySetInnerHTML={{__html:source.title}}>
         </div>
-      </a>
+      </Link>
     </div>
   )
 }
@@ -147,7 +138,7 @@ const ArticleHitsResponseItem = (props)=> {
   )
 }
 
-export class SearchPage extends React.Component {
+export class ArticlePage extends React.Component {
 	render(){
 		let refresh = setInterval(refreshMe, 60000)
 		return (
@@ -214,17 +205,14 @@ export class SearchPage extends React.Component {
 		          </ActionBar>
 
 							<ViewSwitcherHits
-								hitsPerPage={10}
+								hitsPerPage={1}
 								sourceFilter={["nid","type","post_date","title","excerpt","author","newspaper","url","search_thumb","category","tags"]}
 								hitComponents = {[
-									{key:"grid", title:"Grid", itemComponent:ArticleHitsGridItem, defaultOption:true},
-									{key:"list", title:"List", itemComponent:ArticleHitsListItem},
-									{key:"response", title:"Response", itemComponent:ArticleHitsResponseItem}
+									{key:"list", title:"Article", itemComponent:ArticleHitsListItem, defaultOption:true}
 								]}
 								scrollTo="body"
 								/>
 		          <NoHits/>
-							<Pagination showNumbers={true}/>
 		        </LayoutResults>
 		      </LayoutBody>
 		    </Layout>
