@@ -72,17 +72,17 @@ function JSONHighlight(json) {
 
 
 // http://docs.searchkit.co/stable/docs/core/SearchkitManager.html
-searchkit.setQueryProcessor((plainQueryObject)=>{
-	console.log(plainQueryObject)
-	plainQueryObject.size = 1 // set size to 1
+/*searchkit.setQueryProcessor((plainQueryObject)=>{
+	console.log(plainQueryObject.query)
+	//plainQueryObject.size = 1 // set size to 1
   //plainQueryObject.source = false
   return plainQueryObject
-})
+})*/
 
-let removalFn = searchkit.addResultsListener((results)=>{
+/*let removalFn = searchkit.addResultsListener((results)=>{
 	//do something with results
 	//console.log(searchkit) // output Searchkit Manager object to console for debugging
-})
+})*/
 
 const ArticleHitsGridItem = (props)=> {
   const {bemBlocks, result} = props
