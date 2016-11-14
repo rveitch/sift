@@ -106,7 +106,7 @@ const ArticleHitsGridItem = (props)=> {
 export const ArticleHitsListItem = (props)=> {
   const {bemBlocks, result} = props
 	let url = "http://" + result._source.url
-	let post_date = new Date(result._source.post_date)
+	let post_date = new Date(result._source.post_date.replace(/-/g, '/'))
 	let date = post_date.toDateString()
 	let thumb = (result._source.search_thumb == "www.fccnn.com/sites/default/files/styles/square_300/public") ? null:result._source.search_thumb
 	let img = (thumb == null) ? "https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/inforum-placeholder.png":"http://" + result._source.search_thumb

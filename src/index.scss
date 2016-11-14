@@ -2,6 +2,10 @@
 	background: #0072BC !important;
 }
 
+.sk-layout__body {
+	min-height: calc(100% - 60px);
+}
+
 .fcc-menu-logo {
 	margin-right: 15px;
 }
