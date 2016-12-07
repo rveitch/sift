@@ -3,6 +3,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {SearchPage} from "./SearchPage";
 import {ArticlePage} from "./ArticlePage";
+import {GeoPage} from "./GeoPage";
 import {App} from "./AppPage";
 import { Router, Link, Route, browserHistory, IndexRoute } from 'react-router'
 
@@ -35,6 +36,7 @@ ReactDOM.render((
     <IndexRoute component={SearchPage}/>
     <Route path="search" component={SearchPage}/>
 		<Route path="article" component={ArticlePage}/>
+		<Route path="geo" component={GeoPage} />
 		<Route path="page" component={PageView} />
   </Route>
 </Router>
