@@ -18,17 +18,9 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
-	node: {
-		console: true,
-		fs: 'empty',
-		net: 'empty',
-		tls: 'empty'
-	},
   resolve: {
     alias: {
-      react: path.resolve('./node_modules/react'),
-			'mapbox-gl/js/geo/transform': path.join(__dirname, 'node_modules/mapbox-gl/js/geo/transform'),
-			'mapbox-gl': path.join(__dirname, 'node_modules/mapbox-gl/dist/mapbox-gl.js')
+      react: path.resolve('./node_modules/react')
     },
     extensions:[".js", ".jsx", ".webpack.js", ".web.js",""]
   },
