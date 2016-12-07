@@ -3,6 +3,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {SearchPage} from "./SearchPage";
 import {ArticlePage} from "./ArticlePage";
+import {GeoPage} from "./GeoPage";
 import {App} from "./AppPage";
 import { Router, Link, Route, browserHistory, IndexRoute } from 'react-router'
 
@@ -29,6 +30,14 @@ const PageView = () => {
       )
 }
 
+const GeoView = () => {
+	return (
+		<div>
+			<p>I'm a Geo view.</p>
+		</div>
+      )
+}
+
 ReactDOM.render((
 <Router history={browserHistory}>
   <Route path="/" component={App}>
@@ -36,6 +45,7 @@ ReactDOM.render((
     <Route path="search" component={SearchPage}/>
 		<Route path="article" component={ArticlePage}/>
 		<Route path="page" component={PageView} />
+		<Route path="geo" component={GeoPage} />
   </Route>
 </Router>
 ), document.getElementById('root'));
