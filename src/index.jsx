@@ -30,14 +30,6 @@ const PageView = () => {
       )
 }
 
-const GeoView = () => {
-	return (
-		<div>
-			<p>I'm a Geo view.</p>
-		</div>
-      )
-}
-
 ReactDOM.render((
 <Router history={browserHistory}>
   <Route path="/" component={App}>
