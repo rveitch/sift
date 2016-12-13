@@ -20,7 +20,7 @@ require("./index.scss");
 const host = "https://3590b9d403c87e0697b6:8c2e5209a1@f08f4b1b.qb0x.com:30242/fccnn"
 const searchkit = new SearchkitManager(host, {
 	searchOnLoad: true,
-	useHistory: false,
+	useHistory: true,
   basicAuth:"3590b9d403c87e0697b6:8c2e5209a1"
 })
 //<DynamicRangeFilter field="date_terms.month" id="monthrange" title="Month Range"/>
