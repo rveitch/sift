@@ -135,7 +135,15 @@ export const ArticleHitsListItem = (props)=> {
 const ArticleHitsResponseItem = (props)=> {
   const {bemBlocks, result} = props
   const source:any = _.extend({}, result._source, result.highlight)
-	let jsonstr = JSON.stringify(source, undefined, 3)
+	let resultsObj = source
+	delete resultsObj.newspaper;
+	delete resultsObj.author;
+	delete resultsObj.type;
+	delete resultsObj.tags;
+	delete resultsObj.category;
+	delete resultsObj.search_thumb;
+	delete resultsObj.excerpt;
+	let jsonstr = JSON.stringify(resultsObj, undefined, 3)
 	console.log(jsonstr)
 	//let jsonresult = JSONHighlight(source)
   return (
@@ -159,7 +167,7 @@ export class SearchPage extends React.Component {
 		          autofocus={true}
 		          searchOnChange={true}
 							placeholder="Search content..."
-		          prefixQueryFields={["title^2", "body.value", "author.realname", "category.categories.name", "tags.name"]}/>
+		          prefixQueryFields={["title^2", "body.value", "author.realname", "category.categories.name", "tags.name", "address"]}/>
 		      </TopBar>
 		      <LayoutBody>
 		        <SideBar>
@@ -192,6 +200,18 @@ export class SearchPage extends React.Component {
 								field="author.realname.raw"
 								operator="AND"
 								size={6}/>
+							<RefinementListFilter
+								id="state"
+								title="State"
+								field="address.state.raw"
+								operator="AND"
+								size={6}/>
+							<RefinementListFilter
+								id="city"
+								title="City"
+								field="address.city.raw"
+								operator="AND"
+								size={6}/>
 		        </SideBar>
 		        <LayoutResults>
 
@@ -215,7 +235,7 @@ export class SearchPage extends React.Component {
 
 							<ViewSwitcherHits
 								hitsPerPage={10}
-								sourceFilter={["nid","type","post_date","title","excerpt","author","newspaper","url","search_thumb","category","tags"]}
+								sourceFilter={["nid","type","post_date","title","excerpt","author","newspaper","url","search_thumb","category","tags","location","address"]}
 								hitComponents = {[
 									{key:"grid", title:"Grid", itemComponent:ArticleHitsGridItem, defaultOption:true},
 									{key:"list", title:"List", itemComponent:ArticleHitsListItem},
