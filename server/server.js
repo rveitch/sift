@@ -83,7 +83,7 @@ module.exports = {
 			if (process.env.ELASTIC_URL) {
 				console.log('Using Heroku Elasticsearch URL: ' + process.env.ELASTIC_URL);
 			} else {
-				console.log('Using Public Elasticsearch Proxy: http://fccpublicsearch.herokuapp.com/fccnn');
+				console.log('Using Public Elasticsearch Proxy: fccpublicsearch.herokuapp.com/fccnn');
 			}
     });
   }

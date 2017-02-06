@@ -33,7 +33,7 @@ import {
 
 require("./index.scss");
 
-const host = (process.env.ELASTIC_URL || "http://fccpublicsearch.herokuapp.com/fccnn")
+const host = (process.env.ELASTIC_URL || "//fccpublicsearch.herokuapp.com/fccnn")
 const searchkit = new SearchkitManager(host, {
 	searchOnLoad: true,
 	useHistory: true,
