@@ -1,9 +1,9 @@
 {
   "name": "fcc-sift",
-  "version": "0.1.3",
-  "description": "Example FCC searchkit project using webpack & es6",
-  "homepage": "https://github.com/searchkit/searchkit-boilerplate",
-  "bugs": "https://github.com/searchkit/searchkit-boilerplate/issues",
+  "version": "0.1.6",
+  "description": "Forum News Service search app. (Node.js, React, Elasticsearch, Webpack)",
+  "homepage": "https://github.com/rveitch/sift",
+  "bugs": "https://github.com/rveitch/sift/issues",
   "license": "ISC",
   "authors": [
     {
@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/searchkit/searchkit-boilerplate"
+    "url": "https://github.com/rveitch/sift"
   },
   "scripts": {
     "start": "node start.js",

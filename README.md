@@ -1,7 +1,12 @@
-# Searchkit ES6 Boilerplate
-Small project to get started using searchkit. Webpack, es6 (es2015 babel)
+# Sift | FNS Search
+Forum News Service search app. (Node.js, React, Elasticsearch)
 
-## Steps
-* npm install
-* npm start
-* visit http://localhost:3000
+- [See it in action on Heroku](https://fccsearch.herokuapp.com/)
+- Uses [Sift Elasticsearch Proxy](https://github.com/rveitch/sift-proxy) at https://fccpublicsearch.herokuapp.com/
+
+## Setup
+- `$ git clone git@github.com:rveitch/sift.git`
+- `$ npm install`
+- `$ npm start`
+- Visit http://localhost:3000 in your browser.
+- Search!
