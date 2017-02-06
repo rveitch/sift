@@ -33,11 +33,11 @@ import {
 
 require("./index.scss");
 
-const host = "https://3590b9d403c87e0697b6:8c2e5209a1@f08f4b1b.qb0x.com:30242/fccnn"
+const host = (process.env.ELASTIC_URL || "http://fccpublicsearch.herokuapp.com/fccnn")
 const searchkit = new SearchkitManager(host, {
 	searchOnLoad: true,
 	useHistory: true,
-  basicAuth:"3590b9d403c87e0697b6:8c2e5209a1"
+  basicAuth:(process.env.ELASTIC_AUTH || null)
 })
 
 function refreshMe() {

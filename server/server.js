@@ -48,11 +48,9 @@ module.exports = {
 
 
     } else {
-			//console.log('Environment: Production');
+			console.log('Environment: Production');
       //app.use("/static", express.static(__dirname + '/dist'));
 
-
-			console.log('Environment: Dev');
       var webpack = require("webpack");
       var webpackMiddleware = require("webpack-dev-middleware");
       var webpackHotMiddleware = require('webpack-hot-middleware');
@@ -76,14 +74,17 @@ module.exports = {
     }
 
     app.get('*', function(req, res) {
-			// http://localhost:3000/page?q=search
-			// console.log(req.query);
+			console.log(req.query); // Log search query requests
       res.render('index');
     });
 
     app.listen(port, function () {
-      //console.log('server running at localhost:3000, go refresh and see magic');
 			console.log('Search app server is running on http://localhost:' + port);
+			if (process.env.ELASTIC_URL) {
+				console.log('Using Heroku Elasticsearch URL: ' + process.env.ELASTIC_URL);
+			} else {
+				console.log('Using Public Elasticsearch Proxy: http://fccpublicsearch.herokuapp.com/fccnn');
+			}
     });
   }
 }
