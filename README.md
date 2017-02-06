@@ -1,6 +1,8 @@
 # Sift | FNS Search
 Forum News Service search app. (Node.js, React, Elasticsearch)
 
+![sift-screenshot](https://cloud.githubusercontent.com/assets/12876929/22671683/29607bd6-ec95-11e6-977b-ebbbafb46e2d.png)
+
 - [See it in action on Heroku](https://fccsearch.herokuapp.com/)
 - Uses [Sift Elasticsearch Proxy](https://github.com/rveitch/sift-proxy) at https://fccpublicsearch.herokuapp.com/
 
