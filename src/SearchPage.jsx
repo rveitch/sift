@@ -6,30 +6,29 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/styles';
 
 import {
-	// Core
+	/* Core */
 	SearchkitManager, SearchkitProvider, SearchkitComponent,
 
-	// Components - Basic
+	/* Components - Basic & Navigation */
 	SearchBox, Hits, NoHits, HitItemProps, InitialLoader, Pagination, // PaginationSelect,
 
-	// Filters
-	RefinementListFilter, ResetFilters, MenuFilter, GroupedSelectedFilters, //SelectedFilters, HierarchicalMenuFilter, HierarchicalRefinementFilter, NumericRefinementListFilter ,CheckboxFilter, DynamicRangeFilter, RangeFilter, InputFilter, TagFilter, TagFilterList, TagFilterConfig
-
-	// Components - Display, Sorting & Metadata
+	/* Components - Display, Sorting & Metadata */
 	ViewSwitcherHits, ViewSwitcherToggle, PageSizeSelector, SortingSelector,HitsStats,
 
-	// Components - UI
+	/* Components - UI */
 	Layout, LayoutBody, LayoutResults, TopBar, SideBar, ActionBar, ActionBarRow, Panel,
 
-	// Query DSL
-	MultiMatchQuery, TermQuery, BoolShould, BoolMust, BoolMustNot, RangeQuery,
-	FilteredQuery, MatchQuery, MatchPhrasePrefix, SimpleQueryString,
-
-	// List Components:
+	/* Components - List */
 	ItemCheckboxList, CheckboxItemList, ItemHistogramList, Select, // ItemList, Tabs, Toggle, TagCloud,
 
-	// Range Components:
+	/* Components - Range */
 	//RangeSliderHistogram, RangeSliderHistogramInput, RangeInput, RangeSlider, RangeHistogram, RangeSliderInput, RangeHistogramInput
+
+	// Query DSL
+	//MultiMatchQuery, TermQuery, BoolShould, BoolMust, BoolMustNot, RangeQuery, FilteredQuery, MatchQuery, MatchPhrasePrefix, SimpleQueryString,
+
+	/* Filters */
+	RefinementListFilter, ResetFilters, MenuFilter, GroupedSelectedFilters, //SelectedFilters, HierarchicalMenuFilter, HierarchicalRefinementFilter, NumericRefinementListFilter ,CheckboxFilter, DynamicRangeFilter, RangeFilter, InputFilter, TagFilter, TagFilterList, TagFilterConfig
 } from "searchkit";
 
 require("./index.scss");
@@ -40,27 +39,9 @@ const searchkit = new SearchkitManager(host, {
 	useHistory: true,
   basicAuth:"3590b9d403c87e0697b6:8c2e5209a1"
 })
-//<DynamicRangeFilter field="date_terms.month" id="monthrange" title="Month Range"/>
-//sourceFilter={{"exclude":["body","images","picture"]}}
-//sourceFilter={{"include":[],"exclude":["body”]}}
 
-//var myVar = setInterval(searchkit.reloadSearch(), 1000)
-
-//setInterval searchkit.reloadSearch()
-
-/* Default Query Example */
-/*let defQuery = "crime"
-searchkit.addDefaultQuery((query)=> {
-    return query.addQuery(MultiMatchQuery(
-			defQuery, {
-				fields:["title^5", "body.value", "author.realname", "category.categories.name", "tags.name"]
-			}))
-		})*/
-//var Hits = Searchkit.Hits;
-//http://docs.searchkit.co/stable/docs/setup/default-query.html
-
-//source.author[0].realname
 function refreshMe() {
+	// NOTE: This is disabled for now until future implementation
 	//searchkit.reloadSearch()
 	//console.log('refreshed')
 }
@@ -86,20 +67,6 @@ function JSONHighlight(json) {
         return '<span class="' + cls + '">' + match + '</span>';
     });
 }
-
-
-// http://docs.searchkit.co/stable/docs/core/SearchkitManager.html
-/*searchkit.setQueryProcessor((plainQueryObject)=>{
-	console.log(plainQueryObject.query)
-	//plainQueryObject.size = 1 // set size to 1
-  //plainQueryObject.source = false
-  return plainQueryObject
-})*/
-
-/*let removalFn = searchkit.addResultsListener((results)=>{
-	//do something with results
-	//console.log(searchkit) // output Searchkit Manager object to console for debugging
-})*/
 
 const InitialLoaderComponent = (props) => {
 	const {bemBlocks} = props
@@ -136,12 +103,8 @@ export const ArticleHitsListItem = (props)=> {
 	let date = post_date.toDateString()
 	let thumb = (result._source.search_thumb == "www.fccnn.com/sites/default/files/styles/square_300/public") ? null:result._source.search_thumb
 	let img = (thumb == null) ? "https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/inforum-placeholder.png":"http://" + result._source.search_thumb
-	//let name = (result._source.name) ? ", by " + result._source.name:""
 	let author = (result._source.author) ? result._source.author:""
 	let authorname = (author.realname) ? ", by " + author.realname:name
-	//let body = result._source.body
-	//let bodyval = (body.safe_value !== "") ? body.safe_value:body.value.replace(/(<([^>]+)>)/ig,"")
-	//let excerpt = bodyval.substr(0, 252)+'&hellip;' // add check to make sure substr is not null
 	let category = (result._source.category[0]['name']) ? "| " + result._source.category[0]['name']:""
   const source:any = _.extend({}, result._source, result.highlight)
   return (
@@ -162,6 +125,7 @@ const ArticleHitsResponseItem = (props)=> {
   const {bemBlocks, result} = props
   const source:any = _.extend({}, result._source, result.highlight)
 	let resultsObj = source
+	// remove specific fields from the results before display
 	delete resultsObj.newspaper;
 	delete resultsObj.author;
 	delete resultsObj.type;
@@ -170,8 +134,6 @@ const ArticleHitsResponseItem = (props)=> {
 	delete resultsObj.search_thumb;
 	delete resultsObj.excerpt;
 	let jsonstr = JSON.stringify(resultsObj, undefined, 3)
-	console.log(jsonstr)
-	//let jsonresult = JSONHighlight(source)
   return (
     <div className={bemBlocks.item().mix(bemBlocks.container("item"))} data-qa="hit">
 			<div className={bemBlocks.item("details")}>
