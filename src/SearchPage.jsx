@@ -1,18 +1,35 @@
 import * as React from "react";
-import { Link } from 'react-router' // rv added
+import { Link } from 'react-router'
 import * as _ from "lodash";
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/styles';
 
 import {
-	SearchkitManager, SearchkitProvider,
-	SearchBox, RefinementListFilter, MenuFilter,
-	Hits, HitsStats, NoHits, Pagination, SortingSelector,
-	SelectedFilters, ResetFilters, ItemHistogramList,
-	Layout, LayoutBody, LayoutResults, TopBar,
-	SideBar, ActionBar, ActionBarRow, DynamicRangeFilter, RangeFilter, ViewSwitcherToggle,
-  ViewSwitcherHits, MultiMatchQuery, SearchkitComponent, PageSizeSelector, Select, CheckboxFilter, TermQuery, BoolShould, BoolMust, BoolMustNot, RangeQuery
+	// Core
+	SearchkitManager, SearchkitProvider, SearchkitComponent,
+
+	// Components - Basic
+	SearchBox, Hits, NoHits, HitItemProps, InitialLoader, Pagination, // PaginationSelect,
+
+	// Filters
+	RefinementListFilter, ResetFilters, MenuFilter, GroupedSelectedFilters, //SelectedFilters, HierarchicalMenuFilter, HierarchicalRefinementFilter, NumericRefinementListFilter ,CheckboxFilter, DynamicRangeFilter, RangeFilter, InputFilter, TagFilter, TagFilterList, TagFilterConfig
+
+	// Components - Display, Sorting & Metadata
+	ViewSwitcherHits, ViewSwitcherToggle, PageSizeSelector, SortingSelector,HitsStats,
+
+	// Components - UI
+	Layout, LayoutBody, LayoutResults, TopBar, SideBar, ActionBar, ActionBarRow, Panel,
+
+	// Query DSL
+	MultiMatchQuery, TermQuery, BoolShould, BoolMust, BoolMustNot, RangeQuery,
+	FilteredQuery, MatchQuery, MatchPhrasePrefix, SimpleQueryString,
+
+	// List Components:
+	ItemCheckboxList, CheckboxItemList, ItemHistogramList, Select, // ItemList, Tabs, Toggle, TagCloud,
+
+	// Range Components:
+	//RangeSliderHistogram, RangeSliderHistogramInput, RangeInput, RangeSlider, RangeHistogram, RangeSliderInput, RangeHistogramInput
 } from "searchkit";
 
 require("./index.scss");
@@ -83,6 +100,15 @@ function JSONHighlight(json) {
 	//do something with results
 	//console.log(searchkit) // output Searchkit Manager object to console for debugging
 })*/
+
+const InitialLoaderComponent = (props) => {
+	const {bemBlocks} = props
+	return (
+		<div className={'sk-initial-loader'}>
+    Loading, please wait...
+		</div>
+	)
+}
 
 const ArticleHitsGridItem = (props)=> {
   const {bemBlocks, result} = props
@@ -172,46 +198,54 @@ export class SearchPage extends React.Component {
 		      <LayoutBody>
 		        <SideBar>
 							<MenuFilter
-								id="type"
-								title="Content Type"
-								field="type.raw"
-								listComponent={ItemHistogramList}/>
-		          <RefinementListFilter
-		            id="newspaper"
-		            title="Newspaper"
-		            field="newspaper.raw"
-		            operator="AND"
-		            size={6}/>
+								id="select-newspaper"
+								title="Newspaper"
+								field="newspaper.raw"
+								operator="AND"
+								size={9999}
+								listComponent={Select} />
+							<MenuFilter
+								id="select-author"
+								title="Author"
+								field="author.realname.raw"
+								operator="AND"
+								size={9999}
+								listComponent={Select} />
 							<RefinementListFilter
 		            id="category"
 		            title="Category"
 		            field="category.name.raw"
 		            operator="AND"
-		            size={6}/>
+								listComponent={CheckboxItemList}
+		            size={6}
+								containerComponent={<Panel collapsable={true} defaultCollapsed={false}/>} />
 							<RefinementListFilter
 		            id="tags"
 		            title="Tag"
 		            field="tags.name.raw"
 		            operator="AND"
-		            size={6}/>
-							<RefinementListFilter
-								id="author"
-								title="Author"
-								field="author.realname.raw"
-								operator="AND"
-								size={6}/>
-							<RefinementListFilter
-								id="state"
+		            size={6}
+								containerComponent={<Panel collapsable={true} defaultCollapsed={false}/>} />
+							<MenuFilter
+								id="select-state"
 								title="State"
 								field="address.state.raw"
 								operator="AND"
-								size={6}/>
-							<RefinementListFilter
-								id="city"
+								size={9999}
+								listComponent={Select} />
+							<MenuFilter
+								id="select-city"
 								title="City"
 								field="address.city.raw"
 								operator="AND"
-								size={6}/>
+								size={9999}
+								listComponent={Select} />
+							<MenuFilter
+								id="type"
+								title="Content Type"
+								field="type.raw"
+								listComponent={ItemHistogramList}
+								containerComponent={<Panel collapsable={true} defaultCollapsed={true}/>} />
 		        </SideBar>
 		        <LayoutResults>
 
@@ -228,7 +262,7 @@ export class SearchPage extends React.Component {
 		            </ActionBarRow>
 
 		            <ActionBarRow>
-		              <SelectedFilters/>
+		              <GroupedSelectedFilters/>
 		              <ResetFilters/>
 		            </ActionBarRow>
 		          </ActionBar>
@@ -243,6 +277,7 @@ export class SearchPage extends React.Component {
 								]}
 								scrollTo="body"
 								/>
+							<InitialLoader component={InitialLoaderComponent}/>
 		          <NoHits/>
 							<Pagination showNumbers={true}/>
 		        </LayoutResults>
