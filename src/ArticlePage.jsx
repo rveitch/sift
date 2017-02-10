@@ -46,28 +46,6 @@ function refreshMe() {
 	//console.log('refreshed')
 }
 
-function JSONHighlight(json) {
-    if (typeof json != 'string') {
-         json = JSON.stringify(json, undefined, 3);
-    }
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-        var cls = 'number';
-        if (/^"/.test(match)) {
-            if (/:$/.test(match)) {
-                cls = 'key';
-            } else {
-                cls = 'string';
-            }
-        } else if (/true|false/.test(match)) {
-            cls = 'boolean';
-        } else if (/null/.test(match)) {
-            cls = 'null';
-        }
-        return '<span class="' + cls + '">' + match + '</span>';
-    });
-}
-
 const InitialLoaderComponent = (props) => {
 	const {bemBlocks} = props
 	return (
@@ -77,83 +55,51 @@ const InitialLoaderComponent = (props) => {
 	)
 }
 
-const ArticleHitsGridItem = (props)=> {
+export const ArticleHitsSingleItem = (props)=> {
   const {bemBlocks, result} = props
 	let url = "http://" + result._source.url
-	//let url = "/?view=list&q=" + result._source.nid
 	let post_date = new Date(result._source.post_date)
 	let date = post_date.toDateString()
-	let link = "article/?q=" + result._source.nid
-	let thumb = (result._source.search_thumb == "www.fccnn.com/sites/default/files/styles/square_300/public") ? null:result._source.search_thumb
-	let img = (thumb == null) ? "https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/inforum-placeholder.png":"http://" + result._source.search_thumb
-  const source:any = _.extend({}, result._source, result.highlight)
-  return (
-    <div className={bemBlocks.item().mix(bemBlocks.container("item"))} data-qa="hit">
-      <Link to={link}>
-        <img data-qa="poster" className={bemBlocks.item("poster")} src={img} />
-        <div data-qa="title" className={bemBlocks.item("title")} dangerouslySetInnerHTML={{__html:source.title}}>
-        </div>
-      </Link>
-    </div>
-  )
-}
-
-export const ArticleHitsListItem = (props)=> {
-  const {bemBlocks, result} = props
-	let url = "http://" + result._source.url
-	let link = "article/?q=" + result._source.nid
-	let post_date = new Date(result._source.post_date.replace(/-/g, '/'))
-	let date = post_date.toDateString()
-	let thumb = (result._source.search_thumb == "www.fccnn.com/sites/default/files/styles/square_300/public") ? null:result._source.search_thumb
-	let img = (thumb == null) ? "https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/inforum-placeholder.png":"http://" + result._source.search_thumb
+	let thumb = (result._source.search_thumb == "www.fccnn.com/sites/default/files/styles/16x9_860/public") ? null:result._source.search_thumb
+	let img = (thumb == null) ? "https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/inforum-placeholder.png":"http://" + result._source.images[0]['16x9_860']
+	let imgalt = (thumb == null) ? null:result._source.images[0].alt
+	let caption = (imgalt == null) ? "":result._source.images[0].alt
+	//let name = (result._source.name) ? ", by " + result._source.name:""
 	let author = (result._source.author) ? result._source.author:""
-	let authorname = (author.realname) ? ", by " + author.realname:name
+	let authorname = (author.realname) ? "By " + author.realname + ", ":name
+	let linkstyle = "text-decoration:none;";
+	//let body = result._source.body
+	//let bodyval = (body.safe_value !== "") ? body.safe_value:body.value.replace(/(<([^>]+)>)/ig,"")
+	//let excerpt = bodyval.substr(0, 252)+'&hellip;' // add check to make sure substr is not null
+	//http://www.fccnn.com/sites/all/themes/duluthnewstribune_theme/images/logo-retina.png
 	let category = (result._source.category[0]['name']) ? "| " + result._source.category[0]['name']:""
   const source:any = _.extend({}, result._source, result.highlight)
   return (
     <div className={bemBlocks.item().mix(bemBlocks.container("item"))} data-qa="hit">
+			<h1 className={bemBlocks.item("title")} dangerouslySetInnerHTML={{__html:source.title}}></h1>
+			<h3 className={bemBlocks.item("subtitle")}>{authorname}{date} | <a href={url} className={bemBlocks.item("link")} target="_blank">{source.newspaper}</a></h3>
       <div className={bemBlocks.item("poster")}>
         <img data-qa="poster" src={img}/>
+				<h3 className={bemBlocks.item("caption")}>{caption}</h3>
       </div>
       <div className={bemBlocks.item("details")}>
-        <Link to={link}><h2 className={bemBlocks.item("title")} dangerouslySetInnerHTML={{__html:source.title}}></h2></Link>
-        <h3 className={bemBlocks.item("subtitle")}>{date}{authorname} | {source.newspaper} {category}</h3>
-        <div className={bemBlocks.item("text")} dangerouslySetInnerHTML={{__html:source.excerpt}}></div>
+        <div className={bemBlocks.item("text")} dangerouslySetInnerHTML={{__html:source.body.value}}></div>
+				<hr></hr>
+				<strong>Explore related topics:</strong>
+				<div className={bemBlocks.item("category")} dangerouslySetInnerHTML={{__html:source.category[0]['name']}}></div>
       </div>
     </div>
   )
 }
 
-const ArticleHitsResponseItem = (props)=> {
-  const {bemBlocks, result} = props
-  const source:any = _.extend({}, result._source, result.highlight)
-	let resultsObj = source
-	// remove specific fields from the results before display
-	delete resultsObj.newspaper;
-	delete resultsObj.author;
-	delete resultsObj.type;
-	delete resultsObj.tags;
-	delete resultsObj.category;
-	delete resultsObj.search_thumb;
-	delete resultsObj.excerpt;
-	let jsonstr = JSON.stringify(resultsObj, undefined, 3)
-  return (
-    <div className={bemBlocks.item().mix(bemBlocks.container("item"))} data-qa="hit">
-			<div className={bemBlocks.item("details")}>
-				<SyntaxHighlighter language='json' style={docco}>{jsonstr}</SyntaxHighlighter>
-      </div>
-    </div>
-  )
-}
-
-export class SearchPage extends React.Component {
+export class ArticlePage extends React.Component {
 	render(){
 		let refresh = setInterval(refreshMe, 60000)
 		return (
 			<SearchkitProvider searchkit={searchkit}>
 		    <Layout>
 		      <TopBar>
-						<div className="fcc-logo"><Link to="/"><img data-qa="fcc-ico" className="fcc-menu-logo" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/Inforum_Logo_2016_searchkit-2.png" width="166" height="40"/></Link></div>
+						<div className="fcc-logo"><Link to="search"><img data-qa="fcc-ico" className="fcc-menu-logo" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/446514/Inforum_Logo_2016_searchkit-2.png" width="166" height="40"/></Link></div>
 		        <SearchBox
 		          autofocus={true}
 		          searchOnChange={true}
@@ -233,18 +179,15 @@ export class SearchPage extends React.Component {
 		          </ActionBar>
 
 							<ViewSwitcherHits
-								hitsPerPage={10}
-								sourceFilter={["nid","type","post_date","title","excerpt","author","newspaper","url","search_thumb","category","tags","location","address"]}
+								hitsPerPage={1}
+								sourceFilter={["nid","type","post_date","title","excerpt","body","author","newspaper","url","search_thumb", "thumb_filename","category","tags", "images"]}
 								hitComponents = {[
-									{key:"grid", title:"Grid", itemComponent:ArticleHitsGridItem, defaultOption:true},
-									{key:"list", title:"List", itemComponent:ArticleHitsListItem},
-									{key:"response", title:"Response", itemComponent:ArticleHitsResponseItem}
+									{key:"article", title:"Article", itemComponent:ArticleHitsSingleItem, defaultOption:true}
 								]}
 								scrollTo="body"
 								/>
 							<InitialLoader component={InitialLoaderComponent}/>
 		          <NoHits/>
-							<Pagination showNumbers={true}/>
 		        </LayoutResults>
 		      </LayoutBody>
 		    </Layout>
