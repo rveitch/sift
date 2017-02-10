@@ -23,6 +23,63 @@
 	margin: 0 15px 20px;
 }
 
+.sk-hits-article-hit__title {
+font-size: 2.25em;
+margin-top: 0;
+margin-bottom: 0;
+}
+
+.sk-hits-article-hit__subtitle {
+margin-top: .36667em;
+margin-bottom: 1.375em;
+}
+
+.sk-hits-article-hit__subtitle,.sk-hits-article-hit__tags, .sk-hits-article-hit__caption {
+	line-height: 20px;
+	font-size: 14px;
+	color: #666;
+	font-weight: 300
+}
+
+.sk-hits-article-hit__link:link,
+.sk-hits-article-hit__link:visited {
+text-decoration: none;
+color: #06c;
+font-weight: 700;
+}
+
+.sk-hits-article-hit__link:hover {
+text-decoration: none;
+color: #09f;
+font-weight: 700;
+}
+
+.sk-hits-article-hit__caption {
+	font-size: 12px;
+	color: #9E9E9E;
+	margin-left: 10px;
+	margin-bottom: 30px;
+}
+
+.sk-hits-article {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-flow: column wrap;
+	-ms-flex-flow: column wrap;
+	flex-flow: column wrap;
+	-webkit-box-align: start;
+	-webkit-align-items: flex-start;
+	-ms-flex-align: start;
+	align-items: flex-start
+}
+
+.sk-hits-article {
+margin: 0 30px 20px;
+max-width: 700px;
+}
+
 /* Browser specific (not valid) styles to make preformatted text wrap */
 
 pre {
