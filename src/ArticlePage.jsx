@@ -33,11 +33,20 @@ import {
 
 require("./index.scss");
 
-const host = (process.env.ELASTIC_URL || "//fccpublicsearch.herokuapp.com/fccnn")
+const host = (process.env.ELASTIC_URL || "https://elasticsearch.fccinteractive.com/fccnn")
 const searchkit = new SearchkitManager(host, {
 	searchOnLoad: true,
 	useHistory: true,
-  basicAuth:(process.env.ELASTIC_AUTH || null)
+  //basicAuth:(process.env.ELASTIC_AUTH || null)
+})
+
+searchkit.setQueryProcessor((plainQueryObject) => {
+  if (plainQueryObject.filter != undefined) {
+    // hot fix for ES5
+    plainQueryObject.post_filter = plainQueryObject.filter
+    delete plainQueryObject.filter
+  }
+  return plainQueryObject
 })
 
 function refreshMe() {

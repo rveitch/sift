@@ -80,11 +80,6 @@ module.exports = {
 
     app.listen(port, function () {
 			console.log('Search app server is running on http://localhost:' + port);
-			if (process.env.ELASTIC_URL) {
-				console.log('Using Heroku Elasticsearch URL: ' + process.env.ELASTIC_URL);
-			} else {
-				console.log('Using Public Elasticsearch Proxy: fccpublicsearch.herokuapp.com/fccnn');
-			}
     });
   }
 }
