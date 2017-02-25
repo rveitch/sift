@@ -33,7 +33,7 @@ import {
 
 require("./index.scss");
 
-const host = (process.env.ELASTIC_URL || "https://elasticsearch.fccinteractive.com/v5.2.0/fccnn")
+const host = (process.env.ELASTIC_URL || "https://elasticsearch.fccinteractive.com/fccnn")
 const searchkit = new SearchkitManager(host, {
 	searchOnLoad: true,
 	useHistory: true,
